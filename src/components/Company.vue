@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-row mx-auto">
+  <div class="flex flex-row mx-auto" :class="companyClass">
     <h3 class="px-2">{{ company.name }}</h3>
     <p class="px-2">{{ company.age }}</p>
     <p class="px-2">{{ company.country }}</p>
     <p class="px-2">{{ company.category }}</p>
     <p class="font-bold px-2">{{ company.score }}</p>
-    <button @click="award">🍒</button>
+    <button @click="$emit('award', company.name)">🍒</button>
   </div>
 </template>
 
@@ -14,15 +14,15 @@ import { getAuth } from "firebase/auth";
 
 export default {
   props: ["company"],
+  computed: {
+    companyClass() {
+      return this.company.highlightLevel ? "bg-yellow-100" : ''
+    }
+  },
   data() {
     return {
       auth: null,
     };
-  },
-  methods: {
-    async award() {
-      console.log("award to " + this.company.name + " by " + this.auth.currentUser.uid);
-    },
   },
   mounted() {
     this.auth = getAuth();
